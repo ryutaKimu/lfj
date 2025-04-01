@@ -17,3 +17,15 @@ services:
       - "9000"
     volumes:
       - ./server:/var/www 
+  frontend:
+    build: 
+      context: .
+      dockerfile: ./docker/frontend/Dockerfile
+    container_name: frontend-container
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/app
+    command: sh -c 'cd app && npm run start'
+    depends_on:
+      - php
