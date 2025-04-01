@@ -1,24 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 
+type message = {
+  message: string
+}
+
 function App() {
+  const [message, setMessage] = useState<string>('')
+  useEffect(()=>{
+    const fetchMessage = async()=>{
+      try{
+        const response = await fetch('http://localhost:8080/api/message')
+        const data: message = await response.json()
+        setMessage(data.message)
+      }catch(error){
+        console.error('Error fetching message:', error);
+      }
+    }
+    fetchMessage()
+  }, [message])
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>React & Laravel 11 API Test</h1>
+      <p>{message}</p>
     </div>
   );
 }
